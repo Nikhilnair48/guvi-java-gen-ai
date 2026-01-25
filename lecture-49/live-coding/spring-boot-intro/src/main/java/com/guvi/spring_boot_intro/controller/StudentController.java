@@ -10,10 +10,13 @@ import com.guvi.spring_boot_intro.model.Student;
 import com.guvi.spring_boot_intro.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * How will the HTTP requests look?
  */
 @RestController
+@RequestMapping("/students")
 public class StudentController {
     // need an instance of the StudentService
         // a instance variable: StudentService studentService
@@ -38,24 +42,40 @@ public class StudentController {
 
     // @RequestMapping
     // method: GET /students -> List<Student>
-    @GetMapping("/students")
+    @GetMapping()
     public List<Student> listStudents() {
         List<Student> students = studentService.listStudents();
         return students;
     }
 
     // method: GET /students/{id} -> -> a student?
-    @GetMapping("/students/{id}")
+    @GetMapping("/{id}")
     public Optional<Student> getStudentById(@PathVariable UUID id) {
         return studentService.getStudentById(id);
     }
 
     // method: POST /students -> status?
     // @Valid after adding jakarta as a dependency
-    @PostMapping("/students")
+    @PostMapping()
     public ResponseEntity<Optional<Student>> createStudent(@Valid @RequestBody CreateStudentRequest request) {
         Optional<Student> created = studentService.createStudent(request.getName(), request.getEmail());
         return ResponseEntity.status(201).body(created);
     }
-    // http://localhost:9000/students
+
+    // new method to update a student
+    @PutMapping("/{id}")
+    public Student updateStudent(@PathVariable UUID id, @Valid @RequestBody CreateStudentRequest request) {
+        // student service will be invoked
+        return studentService.updateStudent(id, request.getEmail(), request.getName());
+            // receive the updated Student
+        // return updated student
+    }
+
+    // Delete a student
+    // @DeleteMapping
+    // Delete a student by their ID
+    // Student service: a method to perform a deletion
+    // Any changes to the store?
+    // What should the API return?
+
 }

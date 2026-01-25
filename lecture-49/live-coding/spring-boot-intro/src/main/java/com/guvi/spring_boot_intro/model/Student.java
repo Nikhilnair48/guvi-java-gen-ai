@@ -10,8 +10,8 @@ public class Student {
     // toString()
 
     private final UUID id;
-    private final String name;
-    private final String email;
+    private String name;
+    private String email;
 
     public Student(UUID id, String name, String email) {
         this.id = id;
@@ -29,6 +29,14 @@ public class Student {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
