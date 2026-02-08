@@ -1,5 +1,7 @@
 package com.guvi.spring_boot_intro.controller;
 
+import com.guvi.spring_boot_intro.dto.LoginRequest;
+import com.guvi.spring_boot_intro.dto.LoginResponse;
 import com.guvi.spring_boot_intro.dto.SignupRequest;
 import com.guvi.spring_boot_intro.dto.SignupResponse;
 import com.guvi.spring_boot_intro.service.AuthService;
@@ -27,6 +29,14 @@ public class AuthController {
         SignupResponse response = authService.signup(request);
         return ResponseEntity
             .status(HttpStatus.CREATED)
+            .body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@Valid @RequestBody LoginRequest request) {
+        LoginResponse response = authService.login(request);
+        return ResponseEntity
+            .status(HttpStatus.OK)
             .body(response);
     }
 }

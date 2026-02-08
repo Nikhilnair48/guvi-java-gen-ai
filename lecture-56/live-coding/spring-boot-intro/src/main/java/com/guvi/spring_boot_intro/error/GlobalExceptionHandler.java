@@ -4,9 +4,11 @@ import java.util.Map;
 
 import com.guvi.spring_boot_intro.exception.BadRequestException;
 import com.guvi.spring_boot_intro.exception.DuplicateEmailException;
+import com.guvi.spring_boot_intro.exception.InvalidCredentialsException;
 import com.guvi.spring_boot_intro.exception.StudentNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -34,11 +36,25 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity badRequestException(BadRequestException ex){
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity badRequestException(IllegalArgumentException ex){
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body( Map.of("message", ex.getMessage()));
 
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity methodArgumentInvalid(MethodArgumentNotValidException ex){
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body( Map.of("message", ex.getMessage()));
+    }
+    //
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity handleInvalidCredentials(InvalidCredentialsException ex){
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body( Map.of("message", ex.getMessage()));
     }
 }
