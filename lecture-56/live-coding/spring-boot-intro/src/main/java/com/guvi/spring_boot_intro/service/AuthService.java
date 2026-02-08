@@ -1,0 +1,55 @@
+package com.guvi.spring_boot_intro.service;
+
+import java.util.List;
+
+import com.guvi.spring_boot_intro.dto.SignupRequest;
+import com.guvi.spring_boot_intro.dto.SignupResponse;
+import com.guvi.spring_boot_intro.exception.DuplicateEmailException;
+import com.guvi.spring_boot_intro.model.User;
+import com.guvi.spring_boot_intro.repo.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+    public AuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    // email: NiKHil@example.com
+    // existing user with email: nikhil@example.com
+    public SignupResponse signup(SignupRequest request) {
+        String name = request.getName();
+        String email = request.getEmail().toLowerCase();
+        String password = request.getPassword();
+
+        if(userRepository.existsByEmailIgnoreCase(request.getEmail())) {
+            throw new DuplicateEmailException(request.getEmail());
+        }
+
+        // hashing the password
+        String passwordHash = bCryptPasswordEncoder.encode(password);
+
+        // Default role for new signups: STUDENT
+        List<String> roles = List.of("STUDENT");
+        User user = new User(null, name, email, passwordHash, roles, true);
+        User savedUser = userRepository.save(user);
+
+        return new SignupResponse(
+            savedUser.getId(),
+            savedUser.getName(),
+            savedUser.getEmail(),
+            savedUser.getRoles(),
+            savedUser.isActive()
+        );
+
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        
+    }
+}
