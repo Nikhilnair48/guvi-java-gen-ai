@@ -20,4 +20,15 @@ package com.guvi;
  * Longest is `"b"` → length 1
 */
 public class LongestSubstringWithoutRepeatingCharacters {
+    /**
+     ## Approach 1: Brute force
+
+     Try every starting index `i`, expand `j` forward until you hit a repeat (track seen chars with a Set), update max.
+
+     * Time: O(n²) (each start expands potentially up to n)
+     * Space: O(min(n, charset))
+
+     This is teachable and straightforward, but still slower than necessary.
+    */
+
 }
