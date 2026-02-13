@@ -36,6 +36,20 @@ public class ContainerWithMostWater {
          Works, but will time out for large `n` (up to 1e5).
      */
 
+    /**
+     ## Approach 2: Optimal (Two Pointers) — the key greedy idea
+
+     Start with the widest container: `L = 0`, `R = n - 1`.
+
+     At each step:
+
+     1. Compute area using `(L, R)`
+     2. Move the pointer at the shorter height
+
+     If `height[L] < height[R]`, do `L++`
+     Else do `R--`
+     */
+
     public static void main(String[] args) {
 
     }
