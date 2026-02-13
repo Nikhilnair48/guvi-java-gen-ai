@@ -31,4 +31,20 @@ public class LongestSubstringWithoutRepeatingCharacters {
      This is teachable and straightforward, but still slower than necessary.
     */
 
+    /**
+     ## Approach 2: Optimal (Sliding Window + last seen index)
+
+     Maintain:
+
+     * `L` = left pointer of current window
+     * `lastSeen[ch]` = most recent index where `ch` appeared
+
+     When you see `ch` at index `R`:
+
+     * If `ch` was seen inside the current window (`lastSeen[ch] >= L`), then move:
+
+     * `L = lastSeen[ch] + 1`
+     * Update `lastSeen[ch] = R`
+     * Update answer with `R - L + 1`
+    */
 }
