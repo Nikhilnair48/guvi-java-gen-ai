@@ -25,6 +25,17 @@ package com.guvi;
  Notice: even though `3` is tall, it’s limited by `2` when paired with it.
 */
 public class ContainerWithMostWater {
+
+    /**
+         ## Approach 1: Brute force
+
+         Try every pair `(i, j)` with `i < j`, compute area, keep max.
+
+         Time: O(n²)
+         Space: O(1)
+         Works, but will time out for large `n` (up to 1e5).
+     */
+
     public static void main(String[] args) {
 
     }
