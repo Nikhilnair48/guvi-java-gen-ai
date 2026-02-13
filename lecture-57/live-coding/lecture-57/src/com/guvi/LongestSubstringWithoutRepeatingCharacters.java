@@ -30,6 +30,23 @@ public class LongestSubstringWithoutRepeatingCharacters {
 
      This is teachable and straightforward, but still slower than necessary.
     */
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length();
+        int best = 0;
+
+        for (int i = 0; i < n; i++) {
+            boolean[] seen = new boolean[128];
+            for (int j = i; j < n; j++) {
+                char c = s.charAt(j);
+                if (seen[c]) break;
+                seen[c] = true;
+                best = Math.max(best, j - i + 1);
+            }
+        }
+
+        return best;
+    }
+
 
     /**
      ## Approach 2: Optimal (Sliding Window + last seen index)
