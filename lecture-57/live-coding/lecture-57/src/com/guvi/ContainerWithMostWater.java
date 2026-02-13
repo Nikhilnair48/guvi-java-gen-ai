@@ -34,7 +34,22 @@ public class ContainerWithMostWater {
          Time: O(n²)
          Space: O(1)
          Works, but will time out for large `n` (up to 1e5).
-     */
+    */
+    public int maxArea(int[] height) {
+        int n = height.length;
+        int best = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int h = Math.min(height[i], height[j]);
+                int w = j - i;
+                best = Math.max(best, h * w);
+            }
+        }
+
+        return best;
+    }
+
 
     /**
      ## Approach 2: Optimal (Two Pointers) — the key greedy idea
