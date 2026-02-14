@@ -29,4 +29,18 @@ public class JumpGame {
      * Time: exponential in worst case (lots of branching)
      * Space: recursion stack
     */
+
+    /**
+     ## Approach 2: Optimal Greedy (single pass)
+
+     Maintain:
+
+     * `farthest` = the maximum index we can reach so far
+
+     Scan `i` from `0` to `n-1`:
+
+     * If `i > farthest`, it means we can’t even stand on `i` -> return false
+     * Otherwise update `farthest = max(farthest, i + nums[i])`
+     * If `farthest >= n-1`, return true early
+    */
 }
