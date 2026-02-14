@@ -21,4 +21,12 @@ package com.guvi;
  A good mental model: you’re maintaining a “farthest reachable boundary” as you scan left -> right.
 */
 public class JumpGame {
+    /**
+     ## Approach 1: Brute force (DFS / recursion)
+
+     From each index, try all jumps `1..nums[i]` and see if any path reaches the end.
+
+     * Time: exponential in worst case (lots of branching)
+     * Space: recursion stack
+    */
 }
