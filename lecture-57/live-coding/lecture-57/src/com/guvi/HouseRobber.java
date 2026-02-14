@@ -26,4 +26,17 @@ package com.guvi;
  * take it (add its money to best up to house `i-2`)
 */
 public class HouseRobber {
+    /**
+     ## Approach 1: Brute force (recursion)
+
+     At index `i`, you have two options:
+
+     * rob `i` → move to `i+2`
+     * skip `i` → move to `i+1`
+
+     This explores many overlapping subproblems → exponential time.
+
+     * Time: O(2^n)
+     * Space: O(n) recursion depth
+    */
 }
