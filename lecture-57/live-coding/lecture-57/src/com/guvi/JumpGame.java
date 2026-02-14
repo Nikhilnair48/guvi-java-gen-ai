@@ -62,4 +62,15 @@ public class JumpGame {
      * Otherwise update `farthest = max(farthest, i + nums[i])`
      * If `farthest >= n-1`, return true early
     */
+    public boolean canJumpOptimized(int[] nums) {
+        int reach = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i > reach) return false;
+            reach = Math.max(reach, i + nums[i]);
+        }
+
+        return true;
+    }
+
 }
