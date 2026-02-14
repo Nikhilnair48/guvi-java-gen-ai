@@ -29,6 +29,25 @@ public class JumpGame {
      * Time: exponential in worst case (lots of branching)
      * Space: recursion stack
     */
+    public boolean canJump(int[] nums) {
+        return dfs(nums, 0, new boolean[nums.length]);
+    }
+
+    private boolean dfs(int[] nums, int i, boolean[] visiting) {
+        if (i >= nums.length - 1) return true;
+        if (visiting[i]) return false;
+
+        visiting[i] = true;
+        int furthest = Math.min(nums.length - 1, i + nums[i]);
+
+        for (int next = i + 1; next <= furthest; next++) {
+            if (dfs(nums, next, visiting)) return true;
+        }
+
+        visiting[i] = false;
+        return false;
+    }
+
 
     /**
      ## Approach 2: Optimal Greedy (single pass)
