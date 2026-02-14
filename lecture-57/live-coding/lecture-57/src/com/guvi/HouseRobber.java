@@ -39,4 +39,28 @@ public class HouseRobber {
      * Time: O(2^n)
      * Space: O(n) recursion depth
     */
+
+    /**
+     ## Approach 2: DP (optimal) with recurrence
+
+     Let `dp[i]` = max money you can rob from houses `0..i`.
+
+     Then:
+
+     * If you skip house `i`: you keep `dp[i-1]`
+     * If you rob house `i`: you get `nums[i] + dp[i-2]`
+
+     So:
+     `dp[i] = max(dp[i-1], nums[i] + dp[i-2])`
+
+     Base:
+
+     * `dp[0] = nums[0]`
+     * `dp[1] = max(nums[0], nums[1])`
+
+     Answer: `dp[n-1]`
+
+     * Time: O(n)
+     * Space: O(n)
+    */
 }
