@@ -75,4 +75,20 @@ public class HouseRobber {
      * Time: O(n)
      * Space: O(n)
     */
+    public int robOptimized(int[] nums) {
+        int prev2 = 0;
+        int prev1 = 0;
+
+        for (int x : nums) {
+            int take = prev2 + x;
+            int skip = prev1;
+            int cur = Math.max(take, skip);
+
+            prev2 = prev1;
+            prev1 = cur;
+        }
+
+        return prev1;
+    }
+
 }
