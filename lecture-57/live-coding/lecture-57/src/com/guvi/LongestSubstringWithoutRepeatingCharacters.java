@@ -30,8 +30,6 @@ public class LongestSubstringWithoutRepeatingCharacters {
 
      * Time: O(n²) (each start expands potentially up to n)
      * Space: O(min(n, charset))
-
-     This is teachable and straightforward, but still slower than necessary.
     */
     public int lengthOfLongestSubstring(String s) {
         int n = s.length();
