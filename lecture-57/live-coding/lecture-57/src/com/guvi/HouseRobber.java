@@ -39,6 +39,18 @@ public class HouseRobber {
      * Time: O(2^n)
      * Space: O(n) recursion depth
     */
+    public int rob(int[] nums) {
+        return helper(nums, 0);
+    }
+
+    private int helper(int[] nums, int i) {
+        if (i >= nums.length) return 0;
+
+        int take = nums[i] + helper(nums, i + 2);
+        int skip = helper(nums, i + 1);
+
+        return Math.max(take, skip);
+    }
 
     /**
      ## Approach 2: DP (optimal) with recurrence
