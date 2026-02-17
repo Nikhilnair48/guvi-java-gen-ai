@@ -33,3 +33,4 @@ replay_pid*
 *.local.properties
 
 my-reference/
+scripts/
