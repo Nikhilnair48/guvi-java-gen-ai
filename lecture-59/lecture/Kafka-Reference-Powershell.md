@@ -38,3 +38,28 @@ dir
 You should see `bin` and `config` in the output.
 
 ---
+
+## Step 1 — Start ZooKeeper
+**Terminal 1**
+```powershell
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+```
+
+Success looks like: the process stays running (no exit with error).
+
+## Step 2 — Start Kafka (broker)
+**Terminal 2**
+```powershell
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+Success looks like: the process stays running and Kafka listens on `localhost:9092`.
+
+## Step 3 — Quick health check (list topics)
+**Any terminal**
+```powershell
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --list
+```
+
+If this works, Kafka is reachable.
+
