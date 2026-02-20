@@ -78,3 +78,40 @@ bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
 
+## Step 5 — Start the Consumer (prints key + value)
+**Terminal 3**
+```bash
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+  --topic guvi.events --from-beginning \
+  --property print.key=true --property key.separator=" | "
+```
+
+✅ Leave it running. It will print incoming messages.
+
+
+## Step 6 — Start the Producer (type key:value)
+**Terminal 4**
+```bash
+bin/kafka-console-producer.sh --bootstrap-server localhost:9092 \
+  --topic guvi.events \
+  --property "parse.key=true" --property "key.separator=:"
+```
+
+Now type 3 lines (press Enter after each):
+```text
+k1:hello
+k2:enrollment-created
+k3:audit-log
+```
+
+✅ Expected output in the consumer:
+- `k1 | hello`
+- `k2 | enrollment-created`
+- `k3 | audit-log`
+
+
+## Common issues and fastest fixes
+- **Command not found:** you are not inside the Kafka folder → `cd` into the extracted Kafka directory and retry
+- **Port in use (2181 or 9092):** close old Kafka/ZooKeeper terminals or stop the process using that port, then restart
+- **Broker not available:** Kafka may still be starting → wait 10 seconds and retry
+- **Consumer prints nothing:** confirm topic name `guvi.events`, send a new message after consumer starts, or keep `--from-beginning`
