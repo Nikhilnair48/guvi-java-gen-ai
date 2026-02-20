@@ -63,3 +63,63 @@ Success looks like: the process stays running and Kafka listens on `localhost:90
 
 If this works, Kafka is reachable.
 
+## Step 4 — Create the topic
+Topic name: `guvi.events`
+
+**Single broker local setup: replication-factor 1, partitions 1**
+```powershell
+.\bin\windows\kafka-topics.bat --create --topic guvi.events --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
+```
+
+Verify:
+```powershell
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --list
+```
+
+(Optional) Describe:
+```powershell
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic guvi.events
+```
+
+## Step 5 — Start the consumer (prints key + value)
+**Terminal 3**
+```powershell
+.\bin\windows\kafka-console-consumer.bat --topic guvi.events --from-beginning --bootstrap-server localhost:9092 --property "print.key=true" --property "key.separator= | "
+```
+
+Leave it running.
+
+## Step 6 — Start the producer (type `key:value`)
+**Terminal 4**
+```powershell
+.\bin\windows\kafka-console-producer.bat --topic guvi.events --bootstrap-server localhost:9092 --property "parse.key=true" --property "key.separator=:"
+```
+
+Now type 3 lines (press Enter after each):
+```text
+k1:hello
+k2:enrollment-created
+k3:audit-log
+```
+
+Expected output in the consumer:
+- `k1 | hello`
+- `k2 | enrollment-created`
+- `k3 | audit-log`
+
+---
+
+## Stopping servers
+- To stop **Kafka**: go to the Kafka terminal and press `Ctrl + C`
+- To stop **ZooKeeper**: go to the ZooKeeper terminal and press `Ctrl + C`
+
+If you restart, start ZooKeeper first, then Kafka.
+
+---
+
+## Common issues and fastest fixes
+- **Command not found**: you’re not in the Kafka folder → `cd` into the extracted Kafka directory
+- **Port in use (2181 or 9092)**: close old ZooKeeper/Kafka terminals or stop the process using that port, then restart
+- **Broker not available**: Kafka may still be starting → wait ~10 seconds and retry topic/list commands
+- **Consumer prints nothing**: confirm topic `guvi.events`; start consumer first, then send new messages; keep `--from-beginning`
+- **Windows path issues / “input line is too long”**: move Kafka closer to root, e.g. `C:\kafka\...`
