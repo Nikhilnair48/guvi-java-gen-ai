@@ -46,3 +46,35 @@ bin/zookeeper-server-start.sh config/zookeeper.properties
 ✅ Success looks like: process stays running (no exit with error)
 
 
+## Step 2 — Start Kafka
+**Terminal 2**
+```bash
+bin/kafka-server-start.sh config/server.properties
+```
+
+✅ Success looks like: process stays running and broker starts listening on `localhost:9092`
+
+
+## Step 3 — Quick health check
+**Any terminal**
+```bash
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+
+✅ If this works, Kafka is reachable.
+
+
+## Step 4 — Create the topic (locked for class)
+Topic name: `guvi.events`
+
+```bash
+bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+  --create --topic guvi.events --partitions 1 --replication-factor 1
+```
+
+Verify:
+```bash
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+
+
