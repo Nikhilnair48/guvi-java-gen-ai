@@ -25,3 +25,24 @@ After extracting, you should have a folder that contains:
 
 > From now on, all commands below are run **inside the Kafka folder** you extracted.
 
+## Step 0.5 — Open a terminal and `cd` into the Kafka folder
+Before running any `bin/...` commands, you must be inside the extracted Kafka directory.
+
+Example (replace with your actual path):
+```bash
+cd ~/Downloads/kafka_2.13-3.9.0
+
+## Prerequisites
+- Java installed: run `java -version` and confirm it works
+- 2–4 terminals (ZooKeeper, Kafka, consumer, producer)
+- Ports free: `2181` (ZooKeeper), `9092` (Kafka)
+
+## Step 1 — Start ZooKeeper
+**Terminal 1**
+```bash
+bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+
+✅ Success looks like: process stays running (no exit with error)
+
+
