@@ -45,5 +45,20 @@ public class ProducerApp {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
         // Sends 15 messages so we can observe repeating keys
+        for(var i = 0; i < 15; i++) {
+            // (int) Math.random() * 2
+            String key = courseIds[i % courseIds.length];
+            String studentId = studentIds[i % studentIds.length];
+
+            String value =  "{"
+                + "\"eventId\":\"" + UUID.randomUUID() + "\","
+                + "\"courseId\":\"" + key + "\","
+                + "\"studentId\":\"" + studentId + "\","
+                + "\"occurredAt\":\"" + Instant.now() + "\","
+                + "}";
+
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
+
+        }
     }
 }
