@@ -5,6 +5,13 @@ import java.time.Instant;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
+
 /**
  * Connect to localhost:9092
  * Write messages to guvi.events topic
@@ -24,6 +31,19 @@ import java.util.UUID;
  */
 public class ProducerApp {
     public static void main(String[] args) {
-        
+        String bootstrapServer = "localhost:9092";
+        String topic = "guvi.events";
+
+        Properties props = new Properties();
+        // props.put("bootstrap.servers", bootstrapServer);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+
+        String[] courseIds =  { "Java", "Spring", "DSA" };
+        String[] studentIds =  { "Malini", "Ashik", "Sridhar" };
+
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        // Sends 15 messages so we can observe repeating keys
     }
 }
