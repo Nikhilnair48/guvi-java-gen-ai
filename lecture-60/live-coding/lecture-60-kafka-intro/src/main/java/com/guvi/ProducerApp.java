@@ -59,6 +59,12 @@ public class ProducerApp {
 
             ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
 
+            // Send a message
+            producer.send(record);
         }
+        // to flush all messages before we close
+        producer.flush();
+        // close all the network resources
+        producer.close();
     }
 }
