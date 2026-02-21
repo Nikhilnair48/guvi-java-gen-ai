@@ -60,7 +60,23 @@ public class ProducerApp {
             ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
 
             // Send a message
-            producer.send(record);
+            // Option 1: Send a producer record, only
+            // producer.send(record);
+
+            // Option 2: Send a producer record and handle response using a Callback
+            producer.send(record,(RecordMetadata metadata, Exception exception) -> {
+                // If there was an exception
+                if(exception != null) {
+                    System.out.println("[PRODUCER] ERROR: " + exception.getMessage());
+                    return;
+                }
+
+                // Success: Metadata tells us about partitions, offsets, etc
+                System.out.println("[PRODUCER] key=" + key
+                    + " partition=" + metadata.partition()
+                    + " offset=" + metadata.offset());
+            });
+
         }
         // to flush all messages before we close
         producer.flush();
