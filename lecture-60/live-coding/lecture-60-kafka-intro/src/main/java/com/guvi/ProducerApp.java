@@ -77,6 +77,26 @@ public class ProducerApp {
                     + " offset=" + metadata.offset());
             });
 
+             /*
+             // Option 3: Alternative way to rewrite Option 2
+             // Instead of Lambda expression, we use anonymous inner class
+            producer.send(record, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+                    // If there was an exception
+                    if(exception != null) {
+                        System.out.println("[PRODUCER] ERROR: " + exception.getMessage());
+                        return;
+                    }
+
+                    // Success: Metadata tells us about partitions, offsets, etc
+                    System.out.println("[PRODUCER] key=" + key
+                        + " partition=" + metadata.partition()
+                        + " offset=" + metadata.offset());
+                }
+            });
+           */
+
         }
         // to flush all messages before we close
         producer.flush();
