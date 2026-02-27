@@ -1,0 +1,882 @@
+{
+  "info": {
+    "_postman_id": "34654299-a022-424a-9765-c474d5e99a11",
+    "name": "event-registration-pre-session",
+    "description": "Updated for DTO-based request bodies.\nNo auth/authz, no Kafka.\nCreate Event uses CreateEventRequest; Create Booking uses CreateBookingRequest (numberOfSeats).\nIncludes lifecycle status changes and cascade cancellation verification.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "366347",
+    "_collection_link": "https://go.postman.co/collection/366347-34654299-a022-424a-9765-c474d5e99a11?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "0 - Environment / Smoke",
+      "item": [
+        {
+          "name": "Health - List Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "1 - Events",
+      "item": [
+        {
+          "name": "Create Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 2xx', function () { ",
+                  "        pm.expect(pm.response.code).to.be.within(200, 299); ",
+                  "    }",
+                  ");",
+                  "var j = pm.response.json();",
+                  "pm.environment.set('eventId', j.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Concert\",\n  \"location\": \"Vienna\",\n  \"eventDate\": \"2026-04-10\",\n  \"totalSeats\": 500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Events",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin@ex.com",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Event By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "{{eventId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Events (location)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/search?location=Bangalore",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "location",
+                  "value": "Bangalore"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Events (name contains, case-insensitive)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/search?name=spring",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "spring"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Events (date exact)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/search?date=2026-03-10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-03-10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Publish Event (PATCH status=PUBLISHED)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "{{eventId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Event (PATCH status=CANCELLED)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CANCELLED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "{{eventId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2 - Bookings",
+      "item": [
+        {
+          "name": "Create Booking (numberOfSeats=1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "  var j = pm.response.json();",
+                  "  pm.environment.set('bookingId', j.bookingId);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"user-1\",\n  \"numberOfSeats\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
+            },
+            "description": "Requires event to be PUBLISHED. Body matches CreateBookingRequest: {eventId,userId,numberOfSeats}"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Booking (DTO, numberOfSeats=2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"user-1\",\n  \"numberOfSeats\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Bookings (All)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bookings For Event",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/event/{{eventId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "event",
+                "{{eventId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bookings For User (pre-auth endpoint)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/user/user-1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "user",
+                "user-1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Booking (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3 - Demo Flows (Runner-friendly)",
+      "item": [
+        {
+          "name": "Flow A - Happy Path (Create → Publish → Book → Verify)",
+          "item": [
+            {
+              "name": "A1. Create Event",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 2xx', function(){ pm.expect(pm.response.code).to.be.within(200,299); });",
+                      "var j=pm.response.json(); pm.environment.set('eventId', j.id || j._id || '');"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Flow A Event\",\n  \"location\": \"Bangalore\",\n  \"eventDate\": \"2026-03-10\",\n  \"totalSeats\": 5\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/events",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "A2. Publish Event",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"PUBLISHED\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/events/{{eventId}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    "{{eventId}}",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "A3. Create Booking (1 seat)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status 2xx', function(){ pm.expect(pm.response.code).to.be.within(200,299); });",
+                      "var j=pm.response.json(); pm.environment.set('bookingId', j.bookingId || j.id || j._id || '');"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"user-1\",\n  \"numberOfSeats\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/bookings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "A4. Get Event By ID (check remainingSeats decreased)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/events/{{eventId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    "{{eventId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "A5. Get Bookings For Event",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/bookings/event/{{eventId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings",
+                    "event",
+                    "{{eventId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Flow B - Guard (Booking on DRAFT should fail)",
+          "item": [
+            {
+              "name": "B1. Create Event (DRAFT)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var j=pm.response.json(); pm.environment.set('eventId', j.id || j._id || '');"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Flow B Draft Event\",\n  \"location\": \"Bangalore\",\n  \"eventDate\": \"2026-03-11\",\n  \"totalSeats\": 2\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/events",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "B2. Try Booking (expect 409/400)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Expect conflict/bad request', function(){ pm.expect([409,400]).to.include(pm.response.code); });"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"user-1\",\n  \"numberOfSeats\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/bookings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Flow C - Cancel cascade (Event CANCELLED cancels bookings)",
+          "item": [
+            {
+              "name": "C1. Create Event",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var j=pm.response.json(); pm.environment.set('eventId', j.id || j._id || '');"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Flow C Cancel Cascade\",\n  \"location\": \"Bangalore\",\n  \"eventDate\": \"2026-03-12\",\n  \"totalSeats\": 5\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/events",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "C2. Publish Event",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"PUBLISHED\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/events/{{eventId}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    "{{eventId}}",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "C3. Create Booking (1 seat)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"user-1\",\n  \"numberOfSeats\": 1\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/bookings",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "C4. Cancel Event",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CANCELLED\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/events/{{eventId}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    "{{eventId}}",
+                    "status"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "C5. Get Bookings For Event (should show CANCELLED bookings)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/bookings/event/{{eventId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings",
+                    "event",
+                    "{{eventId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "password",
+        "value": "{{vault:authorization-password}}",
+        "type": "string"
+      },
+      {
+        "key": "username",
+        "value": "admin@ex.com",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
