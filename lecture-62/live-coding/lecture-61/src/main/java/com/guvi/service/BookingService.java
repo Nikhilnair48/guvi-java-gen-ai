@@ -45,6 +45,7 @@ public class BookingService {
      * - Keep API contract small and predictable.
      */
     public BookingResponse book(CreateBookingRequest req) {
+        // Validations
         if (req == null) {
             throw new IllegalArgumentException("Request body is required");
         }
@@ -81,7 +82,7 @@ public class BookingService {
             throw new BusinessConflictException("Not enough seats available");
         }
 
-        // NAIVE seat decrement (race-condition demo will come later)
+        // NAIVE seat decrement
         event.setRemainingSeats(event.getRemainingSeats() - seatsRequested);
         eventRepository.save(event);
 
