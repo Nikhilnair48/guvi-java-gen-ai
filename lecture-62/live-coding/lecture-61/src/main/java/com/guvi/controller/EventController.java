@@ -3,16 +3,18 @@ package com.guvi.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.guvi.dto.CreateEventRequest;
+import com.guvi.dto.UpdateEventStatusRequest;
 import com.guvi.model.Event;
 import com.guvi.service.EventService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST endpoints for Events.
+ *
+ * Note: Pre-session version has NO authentication.
+ * We want all APIs stable before introducing auth in the lecture.
+ */
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
@@ -22,23 +24,25 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    // View the events
+    // Create an event (defaults to DRAFT in the service)
     @PostMapping
-    public Event create(@RequestBody Event event) {
-        return eventService.createEvent(event);
+    public Event create(@RequestBody CreateEventRequest request) {
+        return eventService.createEvent(request);
     }
 
-    // View the events
+    // View all events
     @GetMapping
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }
 
+    // View single event details
     @GetMapping("/{id}")
     public Event getEventById(@PathVariable String id) {
         return eventService.getEventById(id);
     }
 
+    // Simple filters (kept intentionally basic)
     @GetMapping("/search")
     public List<Event> searchEvents(
         @RequestParam(required = false) String location,
@@ -46,5 +50,11 @@ public class EventController {
         @RequestParam(required = false) LocalDate date
     ) {
         return eventService.searchEvents(location, name, date);
+    }
+
+    // Update lifecycle status with strict transition rules.
+    @PatchMapping("/{id}/status")
+    public Event updateStatus(@PathVariable String id, @RequestBody UpdateEventStatusRequest req) {
+        return eventService.updateStatus(id, req.getStatus());
     }
 }
