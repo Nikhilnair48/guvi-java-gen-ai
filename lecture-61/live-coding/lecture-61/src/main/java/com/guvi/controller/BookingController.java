@@ -5,6 +5,7 @@ import java.util.List;
 import com.guvi.model.Booking;
 import com.guvi.service.BookingService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +19,14 @@ public class BookingController {
     }
 
     // creating a booking
+    @PostMapping
+    public Booking createABooking(Booking booking) {
+        return bookingService.book(booking);
+    }
 
     // get "my bookings"
     @GetMapping("/{id}")
-    public List<Booking> getMyBookings() {
-
+    public List<Booking> getMyBookings(String userId) {
+        return bookingService.getMyBookings(userId);
     }
 }
