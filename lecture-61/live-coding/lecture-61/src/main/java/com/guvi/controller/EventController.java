@@ -1,5 +1,6 @@
 package com.guvi.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.guvi.model.Event;
@@ -42,8 +43,8 @@ public class EventController {
     public List<Event> searchEvents(
         @RequestParam(required = false) String location,
         @RequestParam(required = false) String name,
-        @RequestParam(required = false) String date
+        @RequestParam(required = false) LocalDate date
     ) {
-
+        return eventService.searchEvents(location, name, date);
     }
 }
