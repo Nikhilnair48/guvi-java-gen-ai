@@ -10,7 +10,6 @@ package com.guvi.dto;
 public class CreateBookingRequest {
 
     private String eventId;
-    private String userId;
 
     // Use wrapper type to avoid "null into int" JSON parsing failures.
     private Integer numberOfSeats;
@@ -23,14 +22,6 @@ public class CreateBookingRequest {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public Integer getNumberOfSeats() {

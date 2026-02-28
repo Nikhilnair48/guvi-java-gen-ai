@@ -51,6 +51,11 @@ public class BookingController {
         return bookingService.getBookingsByUser(userId);
     }
 
+    @GetMapping("/me")
+    public List<BookingResponse> getMyBookings() {
+        return bookingService.getMyBookings();
+    }
+
     // Cancel (soft cancel)
     @DeleteMapping("/{id}")
     public BookingResponse cancel(@PathVariable String id) {

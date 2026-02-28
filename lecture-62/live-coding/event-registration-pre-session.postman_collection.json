@@ -93,21 +93,6 @@
         {
           "name": "List Events",
           "request": {
-            "auth": {
-              "type": "basic",
-              "basic": [
-                {
-                  "key": "password",
-                  "value": "",
-                  "type": "string"
-                },
-                {
-                  "key": "username",
-                  "value": "admin@ex.com",
-                  "type": "string"
-                }
-              ]
-            },
             "method": "GET",
             "header": [],
             "url": {
@@ -299,9 +284,6 @@
             }
           ],
           "request": {
-            "auth": {
-              "type": "noauth"
-            },
             "method": "POST",
             "header": [
               {
@@ -311,7 +293,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"user-1\",\n  \"numberOfSeats\": 1\n}"
+              "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"numberOfSeats\": 1\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/bookings",
@@ -367,6 +349,25 @@
               "path": [
                 "api",
                 "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "me"
               ]
             }
           },
@@ -844,13 +845,13 @@
     "type": "basic",
     "basic": [
       {
-        "key": "password",
-        "value": "{{vault:authorization-password}}",
+        "key": "username",
+        "value": "user@ex.com",
         "type": "string"
       },
       {
-        "key": "username",
-        "value": "admin@ex.com",
+        "key": "password",
+        "value": "{{vault:authorization-password}}",
         "type": "string"
       }
     ]
