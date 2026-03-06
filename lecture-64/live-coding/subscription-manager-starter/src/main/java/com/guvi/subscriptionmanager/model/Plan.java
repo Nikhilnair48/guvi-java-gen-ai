@@ -2,14 +2,39 @@ package com.guvi.subscriptionmanager.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "plans")
 public class Plan {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(name = "plan_code", nullable = false, unique = true)
     private String planCode;
+
+    @Column(nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "billing_cycle", nullable = false)
     private BillingCycle billingCycle;
+
+    @Column(nullable = false)
     private double price;
+
+    @Column(nullable = false)
     private boolean active;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     public Plan() {
