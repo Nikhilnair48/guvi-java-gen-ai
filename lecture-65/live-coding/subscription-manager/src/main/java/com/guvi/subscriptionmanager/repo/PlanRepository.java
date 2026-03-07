@@ -10,5 +10,5 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     Optional<Plan> findByPlanCode(String planCode);
 
-    List<Plan> findAllActive();
+    // List<Plan> findAllActive();
 }

@@ -17,7 +17,8 @@ public class PlanService {
     }
 
     public List<Plan> listActivePlans() {
-        return planRepository.findAllActive();
+        // return planRepository.findAllActive();
+        return null;
     }
 
     public Plan getActivePlanByCode(String planCode) {
